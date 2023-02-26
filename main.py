@@ -3,11 +3,11 @@ import hdlparse.verilog_parser as vlog
 import sys
 
 def generate_test_bench(inputs: list, outputs: list, module: str, filepath):
-    x = f'`timescale 1ps/1ps\n`include "{filepath}"\nmodule testbench;\nreg {", ".join(inputs)} = 0;\nwire {", ".join(outputs)};\n' \
+    x = f'`timescale 1ns/1ns\n\nmodule testbench;\nreg {", ".join(inputs)} = 0;\nwire {", ".join(outputs)};\n' \
         f'{module} uut({", ".join(inputs)}, {", ".join(outputs)});\nalways begin\n' \
         f'\tCLK = ~CLK;\n\t#10;\nend\nalways begin\ninitial begin\n\t$dumpfile("testbench.vcd");' \
-        f"\n\t$dumpvars(0, testbench);\n\t{{A, B}} =2'b00, #20;\n\t{{A, B}} =2'b00, #20;\n\t{{A, B}} =2'b00, #20;\n\t" \
-        f'$display("Test Complete");\nend'
+        f"\n\t$dumpvars(0, testbench);\n\t{{A, B}} =2'b00; #20;\n\t{{A, B}} =2'b01; #20;\n\t{{A, B}} =2'b10; #20;\n\t" \
+        f'$display("Test Complete");\n\t$finish()\nend\nendmodule'
     with open('testbench.v', 'w') as f:
         f.write(x)
     return x

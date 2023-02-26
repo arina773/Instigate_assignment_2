@@ -7,6 +7,6 @@ module hello(A,B, CLK, Z);
 
     always@(posedge CLK)
     begin
-        D = A ^ B ^ D;
+        D = A ^ B;
     end
 endmodule
